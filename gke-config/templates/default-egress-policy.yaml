@@ -1,0 +1,7 @@
+apiVersion: networking.gke.io/v1
+kind: EgressNATPolicy
+metadata:
+  name: default
+spec:
+  action: NoSNAT
+  destinations: []
