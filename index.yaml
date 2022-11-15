@@ -1,0 +1,14 @@
+apiVersion: v1
+entries:
+  gke-config:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2022-11-15T23:50:43.107591517Z"
+    description: A Helm chart for Kubernetes
+    digest: 87ffc634079fe600acdc9150257e8b3568da60aeb37fc76f3561915f4cf21488
+    name: gke-config
+    type: application
+    urls:
+    - https://github.com/nstogner/gke-config-poc/releases/download/gke-config-0.2.0/gke-config-0.2.0.tgz
+    version: 0.2.0
+generated: "2022-11-15T23:50:43.107609618Z"
