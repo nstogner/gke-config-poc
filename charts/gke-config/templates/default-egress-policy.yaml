@@ -1,7 +1,46 @@
-apiVersion: networking.gke.io/v1
-kind: EgressNATPolicy
+{{- if .Values.egressPolicyDeleter.enabled -}}
+apiVersion: v1
+kind: ServiceAccount
 metadata:
-  name: default
+  name: egress-policy-deleter
+  namespace: ct-system
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: egress-policy-deleter
+rules:
+- apiGroups: ["networking.gke.io"]
+  resources: ["egressnatpolicies"]
+  verbs: ["delete"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: egress-policy-deleter
+  namespace: ct-system
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: egress-policy-deleter
+subjects:
+- kind: ServiceAccount
+  name: egress-policy-deleter
+  namespace: ct-system
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: egress-policy-deleter
+  namespace: ct-system
 spec:
-  action: NoSNAT
-  destinations: []
+  template:
+    spec:
+      serviceAccountName: egress-policy-deleter
+      containers:
+      - name: deleter
+        image: google/cloud-sdk:latest
+        command: ["/bin/sh",  "-c", "kubectl delete --ignore-not-found egressnatpolicies default"]
+      restartPolicy: Never
+  backoffLimit: 3
+{{- end }}
