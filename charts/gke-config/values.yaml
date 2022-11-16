@@ -1,2 +1,2 @@
-egressPolicyDeleter:
+defaultEgressPolicyDeleter:
   enabled: false

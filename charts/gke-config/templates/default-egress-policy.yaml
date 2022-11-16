@@ -1,14 +1,14 @@
-{{- if .Values.egressPolicyDeleter.enabled -}}
+{{- if .Values.defaultEgressPolicyDeleter.enabled -}}
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: egress-policy-deleter
+  name: default-egress-policy-deleter
   namespace: ct-system
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
-  name: egress-policy-deleter
+  name: default-egress-policy-deleter
 rules:
 - apiGroups: ["networking.gke.io"]
   resources: ["egressnatpolicies"]
@@ -17,26 +17,26 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
-  name: egress-policy-deleter
+  name: default-egress-policy-deleter
   namespace: ct-system
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: egress-policy-deleter
+  name: default-egress-policy-deleter
 subjects:
 - kind: ServiceAccount
-  name: egress-policy-deleter
+  name: default-egress-policy-deleter
   namespace: ct-system
 ---
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: egress-policy-deleter
+  name: default-egress-policy-deleter
   namespace: ct-system
 spec:
   template:
     spec:
-      serviceAccountName: egress-policy-deleter
+      serviceAccountName: default-egress-policy-deleter
       containers:
       - name: deleter
         image: google/cloud-sdk:latest
